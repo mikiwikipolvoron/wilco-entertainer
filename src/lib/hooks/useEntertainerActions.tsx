@@ -1,5 +1,5 @@
 // hooks/useClientActions.ts - CLIENT ONLY
-import type { ClientServiceEvent } from "wilco-msgs";
+import type { ClientServiceEvent } from "@wilco/shared/events";
 import { useSocketStore } from "../stores/useSocketStore";
 
 export function useEntertainerActions() {

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { GroupAccuracy, BeatsPhase } from "wilco-msgs/src/beats";
+import type { GroupAccuracy, BeatsPhase } from "@wilco/shared/data";
 
 interface BeatsStore {
 	// Current state

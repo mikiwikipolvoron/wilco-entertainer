@@ -5,7 +5,7 @@ export type FloatingEmoji = {
 	x: number;
 	y: number;
 	drift: number;
-	scale: number;
-	duration: number;
-	jitter: number;
+	scale?: number;
+	duration?: number;
+	jitter?: number;
 };

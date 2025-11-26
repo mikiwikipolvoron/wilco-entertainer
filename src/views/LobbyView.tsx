@@ -5,11 +5,10 @@ import { useServerStore } from "../lib/stores/useServerStore";
 
 export default function LobbyView() {
 	const state = useServerStore();
-	const { secondsRemaining, emojis: floatingEmojis } = useLobbyStore();
+	const { secondsRemaining, emojis } = useLobbyStore();
 	const clientUrl = "http://192.168.0.7:5173";
 
 	useLobbySync();
-
 
 	return (
 		<div
@@ -45,19 +44,19 @@ export default function LobbyView() {
 			{/* Emoji animation keyframes */}
 			<style>
 				{`
-        @keyframes floatUpDynamic {
-          0% {
-            transform: translate(var(--start-x), var(--start-y)) scale(var(--scale));
-            opacity: 1;
-          }
-          100% {
-            transform: translate(var(--start-x), calc(var(--start-y) - 1300px))
-                      translateX(calc(var(--jitter) * 1px))
-                      scale(var(--scale));
-            opacity: 0;
-          }
-        }
-      `}
+                @keyframes floatUpDynamic {
+                  0% {
+                    transform: translate(var(--start-x), var(--start-y)) scale(var(--scale));
+                    opacity: 1;
+                  }
+                  100% {
+                    transform: translate(var(--start-x), calc(var(--start-y) - 1300px))
+                              translateX(calc(var(--jitter) * 1px))
+                              scale(var(--scale));
+                    opacity: 0;
+                  }
+                }
+              `}
 			</style>
 
 			{/* Floating emojis overlay, only active in lobby */}
@@ -72,17 +71,13 @@ export default function LobbyView() {
 					overflow: "hidden",
 				}}
 			>
-				{floatingEmojis.map((item) => (
+				{emojis.map((item) => (
 					<div
 						key={item.id}
+                        className="text-5xl top-0 left-0 absolute pointer-events-none"
 						style={{
-							position: "absolute",
-							left: 0,
-							top: 0,
-							fontSize: "3.5rem",
 							transform: `translate(var(--start-x), var(--start-y))`,
 							animation: `floatUpDynamic ${item.duration}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-							pointerEvents: "none",
 							["--start-x" as string]: `${item.x}px`,
 							["--start-y" as string]: `${item.y}px`,
 							["--scale" as string]: item.scale,

@@ -17,7 +17,8 @@
     "react-dom": "^19.2.0",
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.17",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.8",
+    "@wilco/shared": "link:@wilco/shared"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",

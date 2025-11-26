@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { useBeatsStore } from "../lib/stores/useBeatsStore";
-import { useBeatsSync } from "../lib/hooks/useBeatsSync";
+import type { BeatsPhase } from "@wilco/shared/data";
 import { Howl } from "howler";
-import { BeatsPhase } from "wilco-msgs/src/beats";
+import { useEffect, useRef, useState } from "react";
+import { useBeatsSync } from "../lib/hooks/useBeatsSync";
+import { useBeatsStore } from "../lib/stores/useBeatsStore";
 
 // Team color mapping
 const TEAM_COLORS = {
@@ -28,19 +28,21 @@ export default function TapBeatsScreen() {
 		console.log("[TapBeatsScreen] Initializing audio");
 
 		beatAudioRef.current = new Howl({
-			src: ['/audio/BeatsLushLife.mp3'],
+			src: ["/audio/BeatsLushLife.mp3"],
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Beat track loaded"),
-			onloaderror: (id, error) => console.error("[Audio] Beat track failed to load:", error),
+			onloaderror: (id, error) =>
+				console.error("[Audio] Beat track failed to load:", error),
 		});
 
 		melodyAudioRef.current = new Howl({
-			src: ['/audio/MelodyLushLife.mp3'],
+			src: ["/audio/MelodyLushLife.mp3"],
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Melody track loaded"),
-			onloaderror: (id, error) => console.error("[Audio] Melody track failed to load:", error),
+			onloaderror: (id, error) =>
+				console.error("[Audio] Melody track failed to load:", error),
 		});
 
 		return () => {
@@ -69,7 +71,9 @@ export default function TapBeatsScreen() {
 
 		if (!beatAudio || !melodyAudio || !audioPermissionGranted) return;
 
-		console.log(`[TapBeatsScreen] Phase changed: ${phase}, Round: ${round}, BPM: ${bpm}`);
+		console.log(
+			`[TapBeatsScreen] Phase changed: ${phase}, Round: ${round}, BPM: ${bpm}`,
+		);
 
 		if (phase === "instructions") {
 			// Stop all audio and reset
@@ -79,7 +83,9 @@ export default function TapBeatsScreen() {
 		} else if (phase === "beat_on") {
 			// Calculate playback rate based on BPM (source is 96 BPM)
 			const playbackRate = bpm / 96;
-			console.log(`[Audio] Setting playback rate to ${playbackRate.toFixed(3)}x (${bpm} BPM)`);
+			console.log(
+				`[Audio] Setting playback rate to ${playbackRate.toFixed(3)}x (${bpm} BPM)`,
+			);
 
 			beatAudio.rate(playbackRate);
 			melodyAudio.rate(playbackRate);
@@ -138,7 +144,9 @@ export default function TapBeatsScreen() {
 		const beatIntervalMs = (60 / currentBpm) * 1000; // Convert BPM to milliseconds
 		lastBeatTimeRef.current = performance.now();
 
-		console.log(`[Animation] Starting beat animation at ${currentBpm} BPM (${beatIntervalMs.toFixed(0)}ms interval)`);
+		console.log(
+			`[Animation] Starting beat animation at ${currentBpm} BPM (${beatIntervalMs.toFixed(0)}ms interval)`,
+		);
 
 		const animationLoop = (timestamp: number) => {
 			const elapsed = timestamp - lastBeatTimeRef.current;
@@ -195,9 +203,12 @@ export default function TapBeatsScreen() {
 
 	// Trigger team ripples when group accuracies update during beat_off
 	useEffect(() => {
-		if (phase === "beat_off" && groupAccuracies !== prevGroupAccuraciesRef.current) {
+		if (
+			phase === "beat_off" &&
+			groupAccuracies !== prevGroupAccuraciesRef.current
+		) {
 			// Trigger ripple for all teams
-			["A", "B", "C", "D"].forEach(groupId => {
+			["A", "B", "C", "D"].forEach((groupId) => {
 				const rippleElement = document.getElementById(`team-ripple-${groupId}`);
 				if (rippleElement) {
 					rippleElement.style.animation = "none";
@@ -214,20 +225,24 @@ export default function TapBeatsScreen() {
 		return () => stopBeatAnimation();
 	}, []);
 
-
-
 	// beat_on or beat_off phases
 	return (
 		<>
-			{phase === "beat_on" as BeatsPhase && <BeatsActivityPhase />}
-			{phase === "beat_off" as BeatsPhase && <BeatsActivityPhase />}
-			{phase === "instructions" as BeatsPhase && (
+			{phase === ("beat_on" as BeatsPhase) && <BeatsActivityPhase />}
+			{phase === ("beat_off" as BeatsPhase) && <BeatsActivityPhase />}
+			{phase === ("instructions" as BeatsPhase) && (
 				<InstructionsPhase
 					audioPermissionGranted={audioPermissionGranted}
 					onEnableAudio={handleEnableAudio}
 				/>
 			)}
-			{phase === "results" as BeatsPhase && <ResultsPhase winner={winner} groupAccuracies={groupAccuracies} mvp={mvp} />}
+			{phase === ("results" as BeatsPhase) && (
+				<ResultsPhase
+					winner={winner}
+					groupAccuracies={groupAccuracies}
+					mvp={mvp}
+				/>
+			)}
 		</>
 	);
 }
@@ -257,8 +272,8 @@ function BeatsActivityPhase() {
 						id="inner-beat-circle"
 						className="rounded-full bg-white absolute"
 						style={{
-							width: '500px',
-							height: '500px',
+							width: "500px",
+							height: "500px",
 							opacity: 0.8,
 						}}
 					/>
@@ -268,18 +283,21 @@ function BeatsActivityPhase() {
 						id="beat-ring-animated"
 						className="rounded-full border-8 border-white absolute"
 						style={{
-							width: '500px',
-							height: '500px',
+							width: "500px",
+							height: "500px",
 							opacity: 0,
-							transform: 'scale(1.0)',
-							willChange: 'transform, opacity',
+							transform: "scale(1.0)",
+							willChange: "transform, opacity",
 						}}
 					/>
 				</div>
 			)}
 
 			{/* Round indicator */}
-			<div className="absolute top-8 left-1/2 -translate-x-1/2 text-white text-3xl font-bold" style={{ zIndex: 20 }}>
+			<div
+				className="absolute top-8 left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+				style={{ zIndex: 20 }}
+			>
 				Round {round}/3
 				{phase === "beat_on" && round > 1 && (
 					<span className="ml-4 text-red-400 animate-pulse">FASTER!</span>
@@ -290,20 +308,26 @@ function BeatsActivityPhase() {
 			{phase === "beat_off" && (
 				<div className="grid grid-cols-2 gap-12 w-full max-w-4xl px-8">
 					{["A", "B", "C", "D"].map((groupId) => {
-						const groupData = groupAccuracies.find((g) => g.groupId === groupId);
+						const groupData = groupAccuracies.find(
+							(g) => g.groupId === groupId,
+						);
 						const accuracy = groupData?.accuracy || 0;
 						const opacity = 0.3 + accuracy * 0.7; // 0.3 to 1.0 based on accuracy
 
 						return (
-							<div key={groupId} className="flex flex-col items-center justify-center">
+							<div
+								key={groupId}
+								className="flex flex-col items-center justify-center"
+							>
 								<div className="relative">
 									{/* Inner filled circle - fixed 300px */}
 									<div
 										className="rounded-full transition-all duration-300"
 										style={{
-											width: '300px',
-											height: '300px',
-											backgroundColor: TEAM_COLORS[groupId as keyof typeof TEAM_COLORS],
+											width: "300px",
+											height: "300px",
+											backgroundColor:
+												TEAM_COLORS[groupId as keyof typeof TEAM_COLORS],
 											opacity: opacity,
 											boxShadow: `0 0 ${accuracy * 50}px ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
 										}}
@@ -326,8 +350,8 @@ function BeatsActivityPhase() {
 										style={{
 											border: `5px solid ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
 											opacity: 0,
-											transform: 'scale(1.0)',
-											willChange: 'transform, opacity',
+											transform: "scale(1.0)",
+											willChange: "transform, opacity",
 										}}
 									/>
 								</div>
@@ -393,12 +417,12 @@ function BeatsActivityPhase() {
 				}
 			`}</style>
 		</div>
-	)
+	);
 }
 
 function InstructionsPhase({
 	audioPermissionGranted,
-	onEnableAudio
+	onEnableAudio,
 }: {
 	audioPermissionGranted: boolean;
 	onEnableAudio: () => void;
@@ -421,10 +445,13 @@ function InstructionsPhase({
 			<div className="instruction-part-1 absolute inset-0 flex flex-col items-center justify-center p-12">
 				<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 max-w-5xl">
 					<p className="text-5xl font-bold mb-8 text-center">
-						You have been assigned to<br />Team Pink, Blue, Orange, or Green
+						You have been assigned to
+						<br />
+						Team Pink, Blue, Orange, or Green
 					</p>
 					<p className="text-3xl text-center mt-8 leading-relaxed">
-						Raise your screen to your forehead<br />
+						Raise your screen to your forehead
+						<br />
 						and look around to find your teammates!
 					</p>
 				</div>
@@ -433,7 +460,9 @@ function InstructionsPhase({
 			{/* Part 2: Title (15-18s) */}
 			<div className="instruction-part-2 absolute inset-0 flex items-center justify-center">
 				<h1 className="text-9xl font-bold text-center leading-tight">
-					Team Synchronization<br />Challenge
+					Team Synchronization
+					<br />
+					Challenge
 				</h1>
 			</div>
 
@@ -441,14 +470,16 @@ function InstructionsPhase({
 			<div className="instruction-part-3 absolute inset-0 flex flex-col items-center justify-center p-12">
 				<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 max-w-5xl">
 					<p className="text-5xl font-bold text-red-400 mb-8 text-center">
-						⚠️ The stage is out of sync!
+						! The stage is out of sync!
 					</p>
 					<p className="text-3xl text-center leading-relaxed">
-						As teams, you need to tap to the beat<br />
+						As teams, you need to tap to the beat
+						<br />
 						to resynchronize it.
 					</p>
 					<p className="text-2xl text-center mt-8 opacity-80">
-						The better your team's timing,<br />
+						The better your team's timing,
+						<br />
 						the stronger your presence on stage!
 					</p>
 				</div>
@@ -456,9 +487,7 @@ function InstructionsPhase({
 
 			{/* Part 4: Get Ready (28-38s) */}
 			<div className="instruction-part-4 absolute inset-0 flex items-center justify-center">
-				<p className="text-8xl font-bold animate-pulse">
-					Get ready to tap...
-				</p>
+				<p className="text-8xl font-bold animate-pulse">Get ready to tap...</p>
 			</div>
 
 			<style>{`
@@ -535,7 +564,9 @@ function ResultsPhase({
 	groupAccuracies: any[];
 	mvp: { playerId: string; nickname: string; accuracy: number } | null;
 }) {
-	const winnerColor = winner ? TEAM_COLORS[winner as keyof typeof TEAM_COLORS] : "#ffffff";
+	const winnerColor = winner
+		? TEAM_COLORS[winner as keyof typeof TEAM_COLORS]
+		: "#ffffff";
 
 	return (
 		<div
@@ -545,29 +576,35 @@ function ResultsPhase({
 			}}
 		>
 			<div className="text-center space-y-12">
-				<div className="text-9xl font-bold mb-8">
-					100% SYNCH
-				</div>
-				<div className="text-7xl font-bold mb-4">
-					ACCURACY ACHIEVED!
-				</div>
+				<div className="text-9xl font-bold mb-8">100% SYNCH</div>
+				<div className="text-7xl font-bold mb-4">ACCURACY ACHIEVED!</div>
 				<div className="text-6xl mt-12">
-					<span className="text-yellow-300">🏆</span> Team {winner} Wins! <span className="text-yellow-300">🏆</span>
+					<span className="text-yellow-300">🏆</span> Team {winner} Wins!{" "}
+					<span className="text-yellow-300">🏆</span>
 				</div>
 
 				{mvp && (
 					<div className="mt-16 bg-black/30 backdrop-blur-sm rounded-2xl p-12">
 						<div className="text-4xl mb-4">MVP</div>
 						<div className="text-6xl font-bold">{mvp.nickname}</div>
-						<div className="text-3xl mt-4">{Math.round(mvp.accuracy * 100)}% accuracy</div>
+						<div className="text-3xl mt-4">
+							{Math.round(mvp.accuracy * 100)}% accuracy
+						</div>
 					</div>
 				)}
 
 				<div className="mt-12 grid grid-cols-4 gap-8 max-w-4xl">
 					{groupAccuracies.map((group) => (
-						<div key={group.groupId} className="bg-black/30 backdrop-blur-sm rounded-xl p-6">
-							<div className="text-3xl font-bold mb-2">Team {group.groupId}</div>
-							<div className="text-2xl">{Math.round(group.accuracy * 100)}%</div>
+						<div
+							key={group.groupId}
+							className="bg-black/30 backdrop-blur-sm rounded-xl p-6"
+						>
+							<div className="text-3xl font-bold mb-2">
+								Team {group.groupId}
+							</div>
+							<div className="text-2xl">
+								{Math.round(group.accuracy * 100)}%
+							</div>
 							<div className="text-sm mt-2">{group.tapCount} taps</div>
 						</div>
 					))}

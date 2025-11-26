@@ -3,7 +3,7 @@ import type {
 	GroupDefinitions,
 	Player,
 	ServerState,
-} from "wilco-msgs";
+} from "@wilco/shared/data";
 import { create } from "zustand";
 import type { FloatingEmoji } from "../types/floating-emoji";
 
@@ -25,9 +25,8 @@ export const useLobbyStore = create<LobbyStore>((set, get) => ({
 	...initialState,
 
 	decreaseSecondsRemaining: () => {
-        set((state) => ({ secondsRemaining: state.secondsRemaining - 1 }))
-
-    },
+		set((state) => ({ secondsRemaining: state.secondsRemaining - 1 }));
+	},
 
 	addFloatingEmoji: (emoji) => {
 		const x = Math.random() * window.innerWidth;

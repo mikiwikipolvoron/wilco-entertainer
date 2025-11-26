@@ -1,7 +1,7 @@
+import type { ServerEvent } from "@wilco/shared/events";
 import { useEffect } from "react";
-import { useSocketStore } from "../stores/useSocketStore";
 import { useBeatsStore } from "../stores/useBeatsStore";
-import type { ServerEvent } from "wilco-msgs/src/event";
+import { useSocketStore } from "../stores/useSocketStore";
 
 export function useBeatsSync() {
 	const socket = useSocketStore((state) => state.socket);
@@ -10,12 +10,14 @@ export function useBeatsSync() {
 		if (!socket) return;
 
 		function handleServerEvent(event: ServerEvent) {
-			console.log("[BeatsSync] Received event: ", event)
+			console.log("[BeatsSync] Received event: ", event);
 
 			switch (event.type) {
 				case "beat_phase_change":
-					console.log("[BeatsSync] Setting new phase: ", event.phase)
-					useBeatsStore.getState().setPhase(event.phase, event.round, event.bpm);
+					console.log("[BeatsSync] Setting new phase: ", event.phase);
+					useBeatsStore
+						.getState()
+						.setPhase(event.phase, event.round, event.bpm);
 					break;
 
 				case "beat_team_sync_update":
@@ -23,7 +25,9 @@ export function useBeatsSync() {
 					break;
 
 				case "beat_results":
-					useBeatsStore.getState().setResults(event.winner, event.groupAccuracies, event.mvp);
+					useBeatsStore
+						.getState()
+						.setResults(event.winner, event.groupAccuracies, event.mvp);
 					break;
 			}
 		}
