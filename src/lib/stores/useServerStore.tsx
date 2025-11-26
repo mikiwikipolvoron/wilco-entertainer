@@ -3,7 +3,7 @@ import type {
 	GroupDefinitions,
 	Player,
 	ServerState,
-} from "wilco-msgs";
+} from "@wilco/shared/data";
 import { create } from "zustand";
 
 interface ServerStore extends ServerState {

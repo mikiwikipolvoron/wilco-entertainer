@@ -19,6 +19,7 @@ const AppLegacy: React.FC = () => {
 	const [currentScreen, setCurrentScreen] = useState<React.ReactNode>(
 		<div>Connecting…</div>,
 	);
+	const [hasCompletedActivity, setHasCompletedActivity] = useState(false);
 
 	// Trigger Beats: send event to server
 	const startBeats = () => {
@@ -57,25 +58,30 @@ const AppLegacy: React.FC = () => {
 
 		switch (state.activity) {
 			case "beats":
+				setHasCompletedActivity(true);
 				setCurrentScreen(<TapBeatsScreen />);
 				break;
 			case "ar":
+				setHasCompletedActivity(true);
 				setCurrentScreen(<ARScreen />);
 				break;
 			case "instruments":
+				setHasCompletedActivity(true);
 				setCurrentScreen(<InstrumentsScreen />);
 				break;
 			case "energizer":
+				setHasCompletedActivity(true);
 				setCurrentScreen(<EnergizerScreen />);
 				break;
 			case "lobby":
 			default:
-				setCurrentScreen(<LobbyScreen startBeats={startBeats} />);
+				// Show waiting lobby if we've completed an activity
+				setCurrentScreen(<LobbyScreen startBeats={startBeats} isWaiting={hasCompletedActivity} />);
 				break;
 		}
 
 		console.log("Changed activity to: ", state.activity);
-	}, [state]);
+	}, [state, hasCompletedActivity]);
 
 	return (
 		<div className="p-8 w-full h-screen flex flex-col justify-center items-center text-center">

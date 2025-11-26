@@ -1,7 +1,8 @@
+import type { ClientEvent } from "@wilco/shared/events";
 import { io, type Socket } from "socket.io-client";
-import type { ClientEvent } from "wilco-msgs";
 import { create } from "zustand";
-const SERVER_URL = "http://localhost:4000"
+
+const SERVER_URL = "http://localhost:4000";
 interface SocketStore {
 	socket: Socket | null;
 	connect: () => void;
@@ -15,15 +16,15 @@ const useSocketStore = create<SocketStore>((set, get) => ({
 	socket: null,
 
 	connect: () => {
-        if (socketInstance?.connected) {
-            console.log('[Socket] Reusing existing connection');
-            set({ socket: socketInstance });
-            return
-        }
+		if (socketInstance?.connected) {
+			console.log("[Socket] Reusing existing connection");
+			set({ socket: socketInstance });
+			return;
+		}
 
-        if (socketInstance) {
-            socketInstance.disconnect();
-        }
+		if (socketInstance) {
+			socketInstance.disconnect();
+		}
 
 		socketInstance = io(SERVER_URL);
 		set({ socket: socketInstance });
@@ -32,7 +33,7 @@ const useSocketStore = create<SocketStore>((set, get) => ({
 	disconnect: () => {
 		if (socketInstance) {
 			socketInstance?.disconnect();
-            socketInstance = null;
+			socketInstance = null;
 			set({ socket: null });
 		}
 	},

@@ -15,7 +15,7 @@ type FloatingEmoji = {
   jitter: number;
 };
 
-  export default function LobbyScreen({ startBeats }: { startBeats: () => void }) {
+  export default function LobbyScreen({ startBeats, isWaiting = false }: { startBeats: () => void; isWaiting?: boolean }) {
   const clientUrl = "http://192.168.0.7:5173";
   const [floatingEmojis, setFloatingEmojis] = useState<FloatingEmoji[]>([]);
   // Timer (60 seconds)
@@ -85,7 +85,7 @@ type FloatingEmoji = {
       style={{
         width: "100%",
         height: "100vh",
-        background: "#FFD6E8", // pastel pink
+        background: isWaiting ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "#FFD6E8", // purple gradient for waiting, pastel pink for initial
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -97,20 +97,39 @@ type FloatingEmoji = {
         overflow: "hidden",
       }}
     >
-      {/* Lobby core UI */}
-      <h1>Join to set the stage!</h1>
-      <p>First task revealed in <strong>{countdownLabel}</strong></p>
-      <div className="m-6">
-          <QRCodeSVG
-    value={clientUrl}
-  />
-
-      </div>
-      <p style={{ fontSize: "1rem" }}>
-        Scan this QR code on your phone to join:
-        <br />
-        <code>{clientUrl}</code>
-      </p>
+      {/* Lobby core UI - different content based on waiting state */}
+      {isWaiting ? (
+        <>
+          <h1 style={{ fontSize: "4rem", color: "white", marginBottom: "2rem", fontWeight: "bold" }}>
+            Great job!
+          </h1>
+          <p style={{ fontSize: "2.5rem", color: "white", marginBottom: "1rem" }}>
+            Next activity will start in
+          </p>
+          <div style={{
+            fontSize: "6rem",
+            color: "white",
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+          }}>
+            {countdownLabel}
+          </div>
+        </>
+      ) : (
+        <>
+          <h1>Join to set the stage!</h1>
+          <p>First task revealed in <strong>{countdownLabel}</strong></p>
+          <div className="m-6">
+            <QRCodeSVG value={clientUrl} />
+          </div>
+          <p style={{ fontSize: "1rem" }}>
+            Scan this QR code on your phone to join:
+            <br />
+            <code>{clientUrl}</code>
+          </p>
+        </>
+      )}
 
 
       {/* Emoji animation keyframes */}
