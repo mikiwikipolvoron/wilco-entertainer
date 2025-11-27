@@ -1,4 +1,4 @@
-import type { ServerEvent } from "@wilco/shared/events";
+import { SERVER_BEATS_EVENTS, type ServerEvent } from "@wilco/shared/events";
 import { useEffect } from "react";
 import { useBeatsStore } from "../stores/useBeatsStore";
 import { useSocketStore } from "../stores/useSocketStore";
@@ -10,6 +10,9 @@ export function useBeatsSync() {
 		if (!socket) return;
 
 		function handleServerEvent(event: ServerEvent) {
+			// Only handle beats-related events
+			if (!SERVER_BEATS_EVENTS.some((et) => et === event.type)) return;
+
 			console.log("[BeatsSync] Received event: ", event);
 
 			switch (event.type) {

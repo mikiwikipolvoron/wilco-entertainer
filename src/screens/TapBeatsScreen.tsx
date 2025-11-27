@@ -20,7 +20,6 @@ export default function TapBeatsScreen() {
 	const animationFrameRef = useRef<number | null>(null);
 	const lastBeatTimeRef = useRef<number>(0);
 	const [audioPermissionGranted, setAudioPermissionGranted] = useState(false);
-	const prevGroupAccuraciesRef = useRef(groupAccuracies);
 	useBeatsSync();
 
 	// Audio setup - create Howl instances on mount
@@ -119,8 +118,8 @@ export default function TapBeatsScreen() {
 			beatAudio.fade(beatAudio.volume(), 0.0, 500);
 			melodyAudio.volume(1.0);
 
-			// Stop beat animation during melody-only phase
-			stopBeatAnimation();
+			// Keep beat animation running for team circle pulses
+			startBeatAnimation(bpm);
 		} else if (phase === "results") {
 			// Fade out both tracks
 			console.log("[Audio] Fading out all tracks for results");
@@ -199,15 +198,9 @@ export default function TapBeatsScreen() {
 				innerCircle.style.animation = `innerCirclePulse ${Math.min(beatInterval, 300)}ms ease-out`;
 			}
 		}
-	};
 
-	// Trigger team ripples when group accuracies update during beat_off
-	useEffect(() => {
-		if (
-			phase === "beat_off" &&
-			groupAccuracies !== prevGroupAccuraciesRef.current
-		) {
-			// Trigger ripple for all teams
+		// Trigger team ripples on beat during beat_off
+		if (phase === "beat_off") {
 			["A", "B", "C", "D"].forEach((groupId) => {
 				const rippleElement = document.getElementById(`team-ripple-${groupId}`);
 				if (rippleElement) {
@@ -216,9 +209,9 @@ export default function TapBeatsScreen() {
 					rippleElement.style.animation = "teamRipple 400ms ease-out";
 				}
 			});
-			prevGroupAccuraciesRef.current = groupAccuracies;
 		}
-	}, [groupAccuracies, phase]);
+	};
+
 
 	// Clean up on unmount
 	useEffect(() => {
@@ -249,8 +242,55 @@ export default function TapBeatsScreen() {
 
 function BeatsActivityPhase() {
 	const { phase, round, bpm, groupAccuracies, winner, mvp } = useBeatsStore();
+
+	// Calculate winning team(s) during beat_off phase
+	const getWinningTeams = () => {
+		if (phase !== "beat_off" || groupAccuracies.length === 0) return [];
+
+		const maxAccuracy = Math.max(...groupAccuracies.map(g => g.accuracy));
+		return groupAccuracies.filter(g => g.accuracy === maxAccuracy).map(g => g.groupId);
+	};
+
+	const winningTeams = getWinningTeams();
+
+	// Helper to lighten a color
+	const lightenColor = (hex: string, percent: number) => {
+		// Special case for orange - use custom shade
+		if (hex === "#f97316") {
+			return "#f5975d";
+		}
+
+		const num = parseInt(hex.replace("#", ""), 16);
+		const r = (num >> 16) + Math.round(255 * percent);
+		const g = ((num >> 8) & 0x00FF) + Math.round(255 * percent);
+		const b = (num & 0x0000FF) + Math.round(255 * percent);
+
+		return `#${Math.min(255, r).toString(16).padStart(2, '0')}${Math.min(255, g).toString(16).padStart(2, '0')}${Math.min(255, b).toString(16).padStart(2, '0')}`;
+	};
+
+	// Determine background style based on winning teams
+	const getBackgroundStyle = () => {
+		if (phase !== "beat_off" || winningTeams.length === 0) {
+			return { background: "linear-gradient(to bottom right, #581c87, #000000, #1e3a8a)" };
+		}
+
+		if (winningTeams.length === 1) {
+			// Single winner - lighter version of team color
+			const winnerColor = TEAM_COLORS[winningTeams[0] as keyof typeof TEAM_COLORS];
+			const lightColor = lightenColor(winnerColor, 0.6);
+			return { backgroundColor: lightColor };
+		} else {
+			// Tie - create gradient with lighter tied team colors
+			const colors = winningTeams.map(id => lightenColor(TEAM_COLORS[id as keyof typeof TEAM_COLORS], 0.6));
+			return { background: `linear-gradient(to bottom right, ${colors.join(", ")})` };
+		}
+	};
+
 	return (
-		<div className="w-screen h-screen bg-linear-to-br from-purple-900 via-black to-blue-900 flex items-center justify-center relative overflow-hidden">
+		<div
+			className="w-screen h-screen flex items-center justify-center relative overflow-hidden transition-all duration-500"
+			style={getBackgroundStyle()}
+		>
 			{/* Beat pulse indicator */}
 			{phase === "beat_on" && (
 				<div
@@ -306,57 +346,53 @@ function BeatsActivityPhase() {
 
 			{/* Team sync visualizations - only show during beat_off */}
 			{phase === "beat_off" && (
-				<div className="grid grid-cols-2 gap-12 w-full max-w-4xl px-8">
+				<div className="grid grid-cols-2 grid-rows-2 w-full h-full absolute inset-0">
 					{["A", "B", "C", "D"].map((groupId) => {
 						const groupData = groupAccuracies.find(
 							(g) => g.groupId === groupId,
 						);
 						const accuracy = groupData?.accuracy || 0;
-						const opacity = 0.3 + accuracy * 0.7; // 0.3 to 1.0 based on accuracy
+						const isWinning = winningTeams.includes(groupId);
+						const circleSize = 450;
 
 						return (
 							<div
 								key={groupId}
-								className="flex flex-col items-center justify-center"
+								className="flex items-center justify-center"
 							>
-								<div className="relative">
-									{/* Inner filled circle - fixed 300px */}
+								<div className="relative flex items-center justify-center">
+									{/* Inner filled circle - fixed size with percentage inside */}
 									<div
-										className="rounded-full transition-all duration-300"
+										className="rounded-full transition-all duration-500 flex items-center justify-center"
 										style={{
-											width: "300px",
-											height: "300px",
+											width: `${circleSize}px`,
+											height: `${circleSize}px`,
 											backgroundColor:
 												TEAM_COLORS[groupId as keyof typeof TEAM_COLORS],
-											opacity: opacity,
-											boxShadow: `0 0 ${accuracy * 50}px ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
+											opacity: 0.8,
+											boxShadow: isWinning
+												? `0 0 80px 20px ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`
+												: `0 0 20px ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
 										}}
-									/>
+									>
+										<div className="text-white text-8xl font-bold">
+											{Math.round(accuracy * 100)}%
+										</div>
+									</div>
 
-									{/* Outer accuracy ring - scales 300-400px */}
-									<div
-										className="rounded-full absolute inset-0 pointer-events-none transition-all duration-300"
-										style={{
-											border: `5px solid ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
-											opacity: 0.6,
-											transform: `scale(${1 + accuracy * 0.33})`, // 1.0 to 1.33 (300px to 400px)
-										}}
-									/>
-
-									{/* Team ripple overlay */}
+									{/* Beat-synced ring that pulses to the beat */}
 									<div
 										id={`team-ripple-${groupId}`}
-										className="absolute inset-0 rounded-full pointer-events-none"
+										className="absolute rounded-full pointer-events-none"
 										style={{
-											border: `5px solid ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
+											width: `${circleSize}px`,
+											height: `${circleSize}px`,
+											border: `8px solid ${TEAM_COLORS[groupId as keyof typeof TEAM_COLORS]}`,
 											opacity: 0,
 											transform: "scale(1.0)",
 											willChange: "transform, opacity",
 										}}
 									/>
-								</div>
-								<div className="mt-4 text-white text-2xl font-semibold">
-									{Math.round(accuracy * 100)}%
 								</div>
 							</div>
 						);
@@ -470,7 +506,7 @@ function InstructionsPhase({
 			<div className="instruction-part-3 absolute inset-0 flex flex-col items-center justify-center p-12">
 				<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 max-w-5xl">
 					<p className="text-5xl font-bold text-red-400 mb-8 text-center">
-						! The stage is out of sync!
+						!The stage is out of sync!
 					</p>
 					<p className="text-3xl text-center leading-relaxed">
 						As teams, you need to tap to the beat

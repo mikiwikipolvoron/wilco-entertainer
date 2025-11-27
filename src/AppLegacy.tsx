@@ -1,7 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { ServerEvent, ServerState } from "shared-types";
-import { emitClientEvent, getSocket } from "./lib/socket";
 import "./App.css";
 
 import { useServerStore } from "./lib/stores/useServerStore";
@@ -15,7 +14,7 @@ import TapBeatsScreen from "./screens/TapBeatsScreen";
 const AppLegacy: React.FC = () => {
 	const [state, setState] = useState<ServerState | null>(null);
 	const serverState = useServerStore();
-	const sock = useSocketStore();
+	const socket = useSocketStore((s) => s.socket);
 	const [currentScreen, setCurrentScreen] = useState<React.ReactNode>(
 		<div>Connecting…</div>,
 	);
@@ -23,12 +22,12 @@ const AppLegacy: React.FC = () => {
 
 	// Trigger Beats: send event to server
 	const startBeats = () => {
-		emitClientEvent({ type: "request_start_beats" });
+		useSocketStore.getState().emit("client_event", { type: "request_start_beats" });
 	};
 
 	// Register entertainer & listen for server events
 	useEffect(() => {
-		emitClientEvent({ type: "register", role: "entertainer" });
+		useSocketStore.getState().emit("client_event", { type: "register", role: "entertainer" });
 
 		const handler = (event: ServerEvent) => {
 			console.log("Received server event: ", event);
@@ -41,13 +40,13 @@ const AppLegacy: React.FC = () => {
 			// LobbyScreen will subscribe to reactions itself.
 		};
 
-		const socket = getSocket();
+		if (!socket) return;
 		socket.on("server_event", handler);
 
 		return () => {
 			socket.off("server_event", handler);
 		};
-	}, []);
+	}, [socket]);
 
 	// Decide which screen to render based on state.activity
 	useEffect(() => {
