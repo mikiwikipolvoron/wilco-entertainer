@@ -1,5 +1,5 @@
 // hooks/useClientActions.ts - CLIENT ONLY
-import type { ClientServiceEvent } from "@wilco/shared/events";
+import type { ClientLobbyEvent, ClientServiceEvent } from "@wilco/shared/events";
 import { useSocketStore } from "../stores/useSocketStore";
 
 export function useEntertainerActions() {
@@ -22,9 +22,30 @@ export function useEntertainerActions() {
 		},
 
         startBeats: () => {
-            const event = { type: "request_start_beats"}
+            const event: ClientLobbyEvent = { type: "request_start_beats"}
+            socket?.emit("client_event", event);
+        },
+
+        startAR: () => {
+            const event: ClientLobbyEvent = { type: "request_start_ar"}
+            socket?.emit("client_event", event);
+        },
+
+        startInstruments: () => {
+            const event: ClientLobbyEvent = { type: "request_start_instruments"}
+            socket?.emit("client_event", event);
+        },
+
+        startEnergizer: () => {
+            const event: ClientLobbyEvent = { type: "request_start_energizer"}
+            socket?.emit("client_event", event);
+        },
+
+        startOver: () => {
+            const event: ClientLobbyEvent = { type: "request_start_over"}
             socket?.emit("client_event", event);
         }
+
 
 	};
 }
