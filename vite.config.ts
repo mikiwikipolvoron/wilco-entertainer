@@ -7,5 +7,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5174, // ⭐ ANY port different from client
+    allowedHosts: [
+        "rachee-fw.zeedonk-ide.ts.net"
+    ]
   },
 })

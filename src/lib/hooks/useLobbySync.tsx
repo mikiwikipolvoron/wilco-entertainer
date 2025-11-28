@@ -2,8 +2,6 @@ import type { ServerEvent } from "@wilco/shared/events";
 import { useEffect } from "react";
 import { useLobbyStore } from "../stores/useLobbyStore";
 import { useSocketStore } from "../stores/useSocketStore";
-import type { FloatingEmoji } from "../types/floating-emoji";
-import { useServerStore } from "../stores/useServerStore";
 
 /** Hook to keep server state synchronized with our own state
  *
@@ -15,22 +13,21 @@ import { useServerStore } from "../stores/useServerStore";
  */
 export function useLobbySync() {
 	const socket = useSocketStore((s) => s.socket);
-	useEffect(() => {
-		if (!socket) return;
-        if (useLobbyStore.getState().secondsRemaining >= 0) {
+	const { secondsRemaining } = useLobbyStore();
+	// useEffect(() => {
+	// 	if (!socket) return;
+	// 	if (secondsRemaining >= 0) {
+	// 		const timer = setInterval(() => {
+	// 			useLobbyStore.setState((s) => ({
+	// 				secondsRemaining: s.secondsRemaining - 1,
+	// 			}));
+	// 		}, 1000);
 
-            const timer = setInterval(() => {
-                useLobbyStore.setState((s) => ({
-                    secondsRemaining: s.secondsRemaining - 1,
-                }));
-            }, 1000);
-
-            return () => clearInterval(timer); // Cleanup
-        } else {
-            socket.emit("client_event", {type: "request_start_beat"});
-        }
-
-	}, [socket]);
+	// 		return () => clearInterval(timer); // Cleanup
+	// 	} else {
+	// 		socket.emit("client_event", { type: "request_start_beat" });
+	// 	}
+	// }, [socket]);
 
 	useEffect(() => {
 		if (!socket) return;
@@ -55,12 +52,12 @@ export function useLobbySync() {
 						},
 					],
 				}));
-                console.log(useLobbyStore.getState().emojis)
+				console.log(useLobbyStore.getState().emojis);
 			}
 		}
 
 		socket?.on("server_event", handler);
-        console.debug("[LobbySync] handler registered");
+		console.debug("[LobbySync] handler registered");
 
 		return () => {
 			socket?.off("server_event", handler);

@@ -3,6 +3,7 @@ import { Howl } from "howler";
 import { useEffect, useRef, useState } from "react";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";
 import { useBeatsStore } from "../lib/stores/useBeatsStore";
+import { useServerSync } from "../lib/hooks/useServerSync";
 
 // Team color mapping
 const TEAM_COLORS = {
@@ -21,6 +22,7 @@ export default function TapBeatsScreen() {
 	const lastBeatTimeRef = useRef<number>(0);
 	const [audioPermissionGranted, setAudioPermissionGranted] = useState(false);
 	useBeatsSync();
+    useServerSync();
 
 	// Audio setup - create Howl instances on mount
 	useEffect(() => {

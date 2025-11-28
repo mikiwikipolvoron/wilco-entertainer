@@ -34,7 +34,7 @@ export default function ARScreen() {
 					showNotification={showNotification}
 				/>
 			)}
-			{phase === "boss" && (
+			{phase === "boss" && bossHealth > 0 && (
 				<BossPhase bossHealth={bossHealth} bossMaxHealth={bossMaxHealth} />
 			)}
 			{phase === "results" && (
@@ -56,8 +56,8 @@ function AnchoringPhase() {
 			{/* Display ARUCO/Hiro marker */}
 			<div className="bg-white p-8 rounded-2xl shadow-2xl">
 				<img
-					src="/markers/marker-hiro.png"
-					alt="AR Marker"
+					src="/markers/aruco-15.svg"
+					alt="AR Marker - ArUco ID 15"
 					className="w-96 h-96"
 				/>
 			</div>

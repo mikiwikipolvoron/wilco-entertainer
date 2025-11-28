@@ -26,7 +26,7 @@ interface ServerStore extends ServerState {
 }
 
 const initialState = {
-    currentActivity: "lobby" as ActivityId,
+    currentActivity: "start" as ActivityId,
     players: {},
     groups: undefined,
     connected: false,

@@ -2,15 +2,30 @@ import { QRCodeSVG } from "qrcode.react";
 import { useLobbySync } from "../lib/hooks/useLobbySync";
 import { useLobbyStore } from "../lib/stores/useLobbyStore";
 import { useServerStore } from "../lib/stores/useServerStore";
+import { useEffect } from "react";
+import { useSocketStore } from "../lib/stores/useSocketStore";
+import { useEntertainerActions } from "../lib/hooks/useEntertainerActions";
 import { useServerSync } from "../lib/hooks/useServerSync";
 
-export default function LobbyView() {
+export default function StartView() {
 	const state = useServerStore();
-	const { secondsRemaining, emojis } = useLobbyStore();
+	const { secondsRemaining, emojis, decreaseSecondsRemaining } =
+		useLobbyStore();
 	const clientUrl = "http://192.168.0.7:5173";
+    const act = useEntertainerActions();
 
 	useLobbySync();
     useServerSync();
+	useEffect(() => {
+        if (secondsRemaining <= 0) {
+            act.startBeats()
+        }
+		const timer = setInterval(() => {
+			decreaseSecondsRemaining();
+		}, 1000);
+
+		return () => clearInterval(timer); // Cleanup
+	}, [secondsRemaining]);
 
 	return (
 		<div
@@ -30,9 +45,9 @@ export default function LobbyView() {
 			}}
 		>
 			{/* Lobby core UI */}
-			<h1>It's not too late to join!</h1>
+			<h1>Join to set the stage!</h1>
 			<p>
-				But better <strong>hurry</strong>, the activities resume soon!
+				First activity starts in <strong>{secondsRemaining}</strong>
 			</p>
 			<div className="m-6">
 				<QRCodeSVG value={clientUrl} />
