@@ -34,7 +34,7 @@ export default function ARScreen() {
 					showNotification={showNotification}
 				/>
 			)}
-			{phase === "boss" && (
+			{phase === "boss" && bossHealth > 0 && (
 				<BossPhase bossHealth={bossHealth} bossMaxHealth={bossMaxHealth} />
 			)}
 			{phase === "results" && (
