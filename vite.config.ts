@@ -2,13 +2,25 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  server: {
-    port: 5174, // ⭐ ANY port different from client
-    allowedHosts: [
-        "rachee-fw.zeedonk-ide.ts.net"
-    ]
-  },
+export default defineConfig(({ mode }) => {
+    if (mode =="production") {
+        return {
+            plugins: [react(), tailwindcss()],
+            server: {
+                host: true,
+                allowedHosts: ["https://mikiwikipolvoron.github.io"],
+            },
+            base: '/wilco-entertainer/'
+        }
+    } else {
+        return {
+            plugins: [react(), tailwindcss()],
+            server: {
+                host: true,
+                allowedHosts: true,
+                port: 5174
+            },
+            base: '/'
+        }
+    }
 })
