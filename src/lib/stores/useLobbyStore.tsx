@@ -1,9 +1,3 @@
-import type {
-	ActivityId,
-	GroupDefinitions,
-	Player,
-	ServerState,
-} from "@mikiwikipolvoron/wilco-lib/data";
 import { create } from "zustand";
 import type { FloatingEmoji } from "../types/floating-emoji";
 
@@ -21,7 +15,7 @@ const initialState = {
 	emojis: [],
 };
 
-export const useLobbyStore = create<LobbyStore>((set, get) => ({
+export const useLobbyStore = create<LobbyStore>((set) => ({
 	...initialState,
 
 	decreaseSecondsRemaining: () => {

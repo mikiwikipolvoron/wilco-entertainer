@@ -5,8 +5,8 @@ import { useServerStore } from "../lib/stores/useServerStore";
 import { useServerSync } from "../lib/hooks/useServerSync";
 
 export default function LobbyView() {
-	const state = useServerStore();
-	const { secondsRemaining, emojis } = useLobbyStore();
+	// const state = useServerStore();
+	const { emojis } = useLobbyStore();
 	const clientUrl = "http://192.168.0.7:5173";
 
 	useLobbySync();

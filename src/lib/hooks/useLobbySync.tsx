@@ -13,21 +13,6 @@ import { useSocketStore } from "../stores/useSocketStore";
  */
 export function useLobbySync() {
 	const socket = useSocketStore((s) => s.socket);
-	const { secondsRemaining } = useLobbyStore();
-	// useEffect(() => {
-	// 	if (!socket) return;
-	// 	if (secondsRemaining >= 0) {
-	// 		const timer = setInterval(() => {
-	// 			useLobbyStore.setState((s) => ({
-	// 				secondsRemaining: s.secondsRemaining - 1,
-	// 			}));
-	// 		}, 1000);
-
-	// 		return () => clearInterval(timer); // Cleanup
-	// 	} else {
-	// 		socket.emit("client_event", { type: "request_start_beat" });
-	// 	}
-	// }, [socket]);
 
 	useEffect(() => {
 		if (!socket) return;

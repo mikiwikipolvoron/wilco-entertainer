@@ -1,25 +1,24 @@
 import { QRCodeSVG } from "qrcode.react";
-import { useLobbySync } from "../lib/hooks/useLobbySync";
-import { useLobbyStore } from "../lib/stores/useLobbyStore";
-import { useServerStore } from "../lib/stores/useServerStore";
 import { useEffect } from "react";
-import { useSocketStore } from "../lib/stores/useSocketStore";
 import { useEntertainerActions } from "../lib/hooks/useEntertainerActions";
+import { useLobbySync } from "../lib/hooks/useLobbySync";
 import { useServerSync } from "../lib/hooks/useServerSync";
+import { useLobbyStore } from "../lib/stores/useLobbyStore";
+// import { useServerStore } from "../lib/stores/useServerStore";
 
 export default function StartView() {
-	const state = useServerStore();
+	// const state = useServerStore();
 	const { secondsRemaining, emojis, decreaseSecondsRemaining } =
 		useLobbyStore();
 	const clientUrl = "http://192.168.0.7:5173";
-    const act = useEntertainerActions();
+	const act = useEntertainerActions();
 
 	useLobbySync();
-    useServerSync();
+	useServerSync();
 	useEffect(() => {
-        if (secondsRemaining <= 0) {
-            act.startBeats()
-        }
+		if (secondsRemaining <= 0) {
+			act.startBeats();
+		}
 		const timer = setInterval(() => {
 			decreaseSecondsRemaining();
 		}, 1000);

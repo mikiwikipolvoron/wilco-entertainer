@@ -2,8 +2,8 @@ import type { BeatsPhase } from "@mikiwikipolvoron/wilco-lib/data";
 import { Howl } from "howler";
 import { useEffect, useRef, useState } from "react";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";
-import { useBeatsStore } from "../lib/stores/useBeatsStore";
 import { useServerSync } from "../lib/hooks/useServerSync";
+import { useBeatsStore } from "../lib/stores/useBeatsStore";
 
 // Team color mapping
 const TEAM_COLORS = {
@@ -15,7 +15,7 @@ const TEAM_COLORS = {
 
 export default function TapBeatsScreen() {
 	const { phase, round, bpm, winner, groupAccuracies, mvp } = useBeatsStore();
-	const beatAnimationRef = useRef<number>(0);
+	// const beatAnimationRef = useRef<number>(0);
 	const beatAudioRef = useRef<Howl | null>(null);
 	const melodyAudioRef = useRef<Howl | null>(null);
 	const animationFrameRef = useRef<number | null>(null);
@@ -33,7 +33,7 @@ export default function TapBeatsScreen() {
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Beat track loaded"),
-			onloaderror: (id, error) =>
+			onloaderror: (_id, error) =>
 				console.error("[Audio] Beat track failed to load:", error),
 		});
 
@@ -42,7 +42,7 @@ export default function TapBeatsScreen() {
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Melody track loaded"),
-			onloaderror: (id, error) =>
+			onloaderror: (_id, error) =>
 				console.error("[Audio] Melody track failed to load:", error),
 		});
 
@@ -214,7 +214,6 @@ export default function TapBeatsScreen() {
 		}
 	};
 
-
 	// Clean up on unmount
 	useEffect(() => {
 		return () => stopBeatAnimation();
@@ -243,14 +242,17 @@ export default function TapBeatsScreen() {
 }
 
 function BeatsActivityPhase() {
-	const { phase, round, bpm, groupAccuracies, winner, mvp } = useBeatsStore();
+    // removed bpm, winner, mvp
+	const { phase, round, groupAccuracies } = useBeatsStore();
 
 	// Calculate winning team(s) during beat_off phase
 	const getWinningTeams = () => {
 		if (phase !== "beat_off" || groupAccuracies.length === 0) return [];
 
-		const maxAccuracy = Math.max(...groupAccuracies.map(g => g.accuracy));
-		return groupAccuracies.filter(g => g.accuracy === maxAccuracy).map(g => g.groupId);
+		const maxAccuracy = Math.max(...groupAccuracies.map((g) => g.accuracy));
+		return groupAccuracies
+			.filter((g) => g.accuracy === maxAccuracy)
+			.map((g) => g.groupId);
 	};
 
 	const winningTeams = getWinningTeams();
@@ -264,27 +266,35 @@ function BeatsActivityPhase() {
 
 		const num = parseInt(hex.replace("#", ""), 16);
 		const r = (num >> 16) + Math.round(255 * percent);
-		const g = ((num >> 8) & 0x00FF) + Math.round(255 * percent);
-		const b = (num & 0x0000FF) + Math.round(255 * percent);
+		const g = ((num >> 8) & 0x00ff) + Math.round(255 * percent);
+		const b = (num & 0x0000ff) + Math.round(255 * percent);
 
-		return `#${Math.min(255, r).toString(16).padStart(2, '0')}${Math.min(255, g).toString(16).padStart(2, '0')}${Math.min(255, b).toString(16).padStart(2, '0')}`;
+		return `#${Math.min(255, r).toString(16).padStart(2, "0")}${Math.min(255, g).toString(16).padStart(2, "0")}${Math.min(255, b).toString(16).padStart(2, "0")}`;
 	};
 
 	// Determine background style based on winning teams
 	const getBackgroundStyle = () => {
 		if (phase !== "beat_off" || winningTeams.length === 0) {
-			return { background: "linear-gradient(to bottom right, #581c87, #000000, #1e3a8a)" };
+			return {
+				background:
+					"linear-gradient(to bottom right, #581c87, #000000, #1e3a8a)",
+			};
 		}
 
 		if (winningTeams.length === 1) {
 			// Single winner - lighter version of team color
-			const winnerColor = TEAM_COLORS[winningTeams[0] as keyof typeof TEAM_COLORS];
+			const winnerColor =
+				TEAM_COLORS[winningTeams[0] as keyof typeof TEAM_COLORS];
 			const lightColor = lightenColor(winnerColor, 0.6);
 			return { backgroundColor: lightColor };
 		} else {
 			// Tie - create gradient with lighter tied team colors
-			const colors = winningTeams.map(id => lightenColor(TEAM_COLORS[id as keyof typeof TEAM_COLORS], 0.6));
-			return { background: `linear-gradient(to bottom right, ${colors.join(", ")})` };
+			const colors = winningTeams.map((id) =>
+				lightenColor(TEAM_COLORS[id as keyof typeof TEAM_COLORS], 0.6),
+			);
+			return {
+				background: `linear-gradient(to bottom right, ${colors.join(", ")})`,
+			};
 		}
 	};
 
@@ -358,10 +368,7 @@ function BeatsActivityPhase() {
 						const circleSize = 450;
 
 						return (
-							<div
-								key={groupId}
-								className="flex items-center justify-center"
-							>
+							<div key={groupId} className="flex items-center justify-center">
 								<div className="relative flex items-center justify-center">
 									{/* Inner filled circle - fixed size with percentage inside */}
 									<div
