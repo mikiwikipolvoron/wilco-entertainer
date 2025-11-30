@@ -1,4 +1,4 @@
-import type { BeatsPhase } from "@mikiwikipolvoron/wilco/data";
+import type { BeatsPhase } from "@mikiwikipolvoron/wilco-lib/data";
 import { Howl } from "howler";
 import { useEffect, useRef, useState } from "react";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";

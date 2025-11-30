@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ARPhase } from "@mikiwikipolvoron/wilco/data";
+import type { ARPhase } from "@mikiwikipolvoron/wilco-lib/data";
 
 interface EntertainerARState {
 	phase: ARPhase;
