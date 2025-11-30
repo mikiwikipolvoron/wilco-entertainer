@@ -1,8 +1,8 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useLobbySync } from "../lib/hooks/useLobbySync";
-import { useLobbyStore } from "../lib/stores/useLobbyStore";
-import { useServerStore } from "../lib/stores/useServerStore";
+// import { useServerStore } from "../lib/stores/useServerStore";
 import { useServerSync } from "../lib/hooks/useServerSync";
+import { useLobbyStore } from "../lib/stores/useLobbyStore";
 
 export default function LobbyView() {
 	// const state = useServerStore();
@@ -10,7 +10,7 @@ export default function LobbyView() {
 	const clientUrl = "http://192.168.0.7:5173";
 
 	useLobbySync();
-    useServerSync();
+	useServerSync();
 
 	return (
 		<div
