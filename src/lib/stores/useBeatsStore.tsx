@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { GroupAccuracy, BeatsPhase } from "@wilco/shared/data";
+import type { GroupAccuracy, BeatsPhase } from "@mikiwikipolvoron/wilco/data";
 
 interface BeatsStore {
 	// Current state

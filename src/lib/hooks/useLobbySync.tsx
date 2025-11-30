@@ -1,4 +1,4 @@
-import type { ServerEvent } from "@wilco/shared/events";
+import type { ServerEvent } from "@mikiwikipolvoron/wilco/events";
 import { useEffect } from "react";
 import { useLobbyStore } from "../stores/useLobbyStore";
 import { useSocketStore } from "../stores/useSocketStore";

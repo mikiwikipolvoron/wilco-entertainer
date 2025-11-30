@@ -1,4 +1,4 @@
-import type { BeatsPhase } from "@wilco/shared/data";
+import type { BeatsPhase } from "@mikiwikipolvoron/wilco/data";
 import { Howl } from "howler";
 import { useEffect, useRef, useState } from "react";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";
@@ -22,7 +22,7 @@ export default function TapBeatsScreen() {
 	const lastBeatTimeRef = useRef<number>(0);
 	const [audioPermissionGranted, setAudioPermissionGranted] = useState(false);
 	useBeatsSync();
-    useServerSync();
+	useServerSync();
 
 	// Audio setup - create Howl instances on mount
 	useEffect(() => {

@@ -1,16 +1,16 @@
 import type {
-	ActivityId,
-	GroupDefinitions,
-	Player,
-	ServerState,
-} from "@wilco/shared/data";
+    ActivityId,
+    GroupDefinitions,
+    Player,
+    ServerState,
+} from "@mikiwikipolvoron/wilco/data";
 import { create } from "zustand";
 
 interface ServerStore extends ServerState {
     // Server-side values
-	currentActivity: ActivityId;
-	players: Record<string, Player>;
-	groups?: GroupDefinitions;
+    currentActivity: ActivityId;
+    players: Record<string, Player>;
+    groups?: GroupDefinitions;
     connected: boolean;
 
     // Client-side values, updated and tracked by us
@@ -37,7 +37,7 @@ const initialState = {
 
 export const useServerStore = create<ServerStore>((set) => ({
     ...initialState,
-    
+
     _handlePlayerJoined: (player) => set((state) => ({
         players: { ...state.players, [player.id]: player },
     })),
@@ -50,6 +50,6 @@ export const useServerStore = create<ServerStore>((set) => ({
     _handleActivityStarted: (activity) => set({ currentActivity: activity }),
 
     _handleGroupsUpdated: (groups) => set({ groups }),
-    
+
     _setConnected: (connected) => set({ connected }),
 }))

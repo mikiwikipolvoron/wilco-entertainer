@@ -3,7 +3,7 @@ import type {
 	GroupDefinitions,
 	Player,
 	ServerState,
-} from "@wilco/shared/data";
+} from "@mikiwikipolvoron/wilco/data";
 import { create } from "zustand";
 import type { FloatingEmoji } from "../types/floating-emoji";
 
