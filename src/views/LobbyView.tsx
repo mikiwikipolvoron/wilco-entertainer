@@ -7,7 +7,7 @@ import { useLobbyStore } from "../lib/stores/useLobbyStore";
 export default function LobbyView() {
 	// const state = useServerStore();
 	const { emojis } = useLobbyStore();
-	const clientUrl = "http://192.168.0.7:5173";
+	const clientUrl = "https://mikiwikipolvoron.github.io/wilco-client";
 
 	useLobbySync();
 	useServerSync();

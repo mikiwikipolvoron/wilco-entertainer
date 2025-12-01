@@ -3,7 +3,7 @@ import type { ClientLobbyEvent, ClientServiceEvent } from "@mikiwikipolvoron/wil
 import { useSocketStore } from "../stores/useSocketStore";
 
 export function useEntertainerActions() {
-    const socket = useSocketStore((s) => s.socket);
+    const { socket } = useSocketStore();
 
     return {
         // Service actions

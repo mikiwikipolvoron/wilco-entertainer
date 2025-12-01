@@ -4,19 +4,20 @@ import { useEntertainerActions } from "../lib/hooks/useEntertainerActions";
 import { useLobbySync } from "../lib/hooks/useLobbySync";
 import { useServerSync } from "../lib/hooks/useServerSync";
 import { useLobbyStore } from "../lib/stores/useLobbyStore";
-// import { useServerStore } from "../lib/stores/useServerStore";
+import { useServerStore } from "../lib/stores/useServerStore";
 
 export default function StartView() {
-	// const state = useServerStore();
+	const state = useServerStore();
 	const { secondsRemaining, emojis, decreaseSecondsRemaining } =
 		useLobbyStore();
-	const clientUrl = "https://mikiwikipolvoron.github.io/wilco-client/";
+	const clientUrl = "https://mikiwikipolvoron.github.io/wilco-client";
 	const act = useEntertainerActions();
 
 	useLobbySync();
 	useServerSync();
 	useEffect(() => {
 		if (secondsRemaining <= 0) {
+            act.startOver();
 			act.startBeats();
 		}
 		const timer = setInterval(() => {
