@@ -3,6 +3,7 @@ import { io, type Socket } from "socket.io-client";
 import { create } from "zustand";
 
 const SERVER_URL = "https://ws.tardy.sh";
+console.debug(SERVER_URL)
 interface SocketStore {
 	socket: Socket | null;
 	connect: () => void;
