@@ -10,7 +10,7 @@ export default function StartView() {
 	// const state = useServerStore();
 	const { secondsRemaining, emojis, decreaseSecondsRemaining } =
 		useLobbyStore();
-	const clientUrl = "http://192.168.0.7:5173";
+	const clientUrl = "https://mikiwikipolvoron.github.io/wilco-client/";
 	const act = useEntertainerActions();
 
 	useLobbySync();
