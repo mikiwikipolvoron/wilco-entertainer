@@ -1,9 +1,16 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
 
 :root {
-  font-family: system-ui, "Inter", Helvetica, Arial, sans-serif;
+  /* font-family: system-ui, "Inter", Helvetica, Arial, sans-serif; */
+  /* font-weight: 400; */
   line-height: 1.5;
   font-weight: 400;
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  
   color-scheme: dark;
   color: #e5e7eb;
   background-color: #0b1020;
@@ -11,6 +18,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.gradient-background {
+  background: linear-gradient(197deg, #DA3D4B 0%, #FF6657 25%, #FEBB51 63%, #F9B314 100%)
 }
 
 a {
