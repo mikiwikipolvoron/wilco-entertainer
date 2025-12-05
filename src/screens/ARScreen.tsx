@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useARStore } from "../lib/stores/useARStore";
 import { useARSync } from "../lib/hooks/useARSync";
+import { useServerSync } from "../lib/hooks/useServerSync";
 
 export default function ARScreen() {
 	const {
@@ -14,7 +15,9 @@ export default function ARScreen() {
 	} = useARStore();
 	const [showNotification, setShowNotification] = useState(false);
 
-	useARSync();
+	useARSync();	
+	useServerSync();
+	
 
 	// Show notification when item collected
 	useEffect(() => {
@@ -102,14 +105,14 @@ function HuntingPhase({
 			{/* Notification */}
 			{showNotification && (
 				<div className="absolute top-24 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-xl text-3xl font-bold animate-bounce">
-					✅ Item Found!
+					Item Found!
 				</div>
 			)}
 
 			{/* Dressing Room Placeholder */}
 			<div className="flex-1 bg-white/10 backdrop-blur-sm rounded-2xl p-8 flex items-center justify-center">
 				<div className="text-center">
-					<p className="text-6xl mb-4">🎸</p>
+					<p className="text-6xl mb-4">🌺</p>
 					<p className="text-3xl opacity-70">Dressing Room</p>
 					<p className="text-xl opacity-50 mt-2">
 						(Missing items shown as outlines)

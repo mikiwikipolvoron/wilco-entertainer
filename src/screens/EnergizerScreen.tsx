@@ -6,6 +6,7 @@ import type {
 } from "@mikiwikipolvoron/wilco-lib/events";
 import { useEffect, useRef, useState } from "react";
 import { useSocketStore } from "../lib/stores/useSocketStore";
+import { useServerSync } from "../lib/hooks/useServerSync";
 
 type Phase =
 	| "instructions1"
@@ -32,6 +33,7 @@ export default function EnergizerScreen() {
 	} | null>(null);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [audioBlocked, setAudioBlocked] = useState(false);
+	useServerSync();
 
 	useEffect(() => {
 		connect();

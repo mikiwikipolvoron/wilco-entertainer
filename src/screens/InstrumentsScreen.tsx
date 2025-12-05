@@ -6,6 +6,7 @@ import type {
 } from "@mikiwikipolvoron/wilco-lib/events";
 import { useEffect, useMemo, useState } from "react";
 import { useSocketStore } from "../lib/stores/useSocketStore";
+import { useServerSync } from "../lib/hooks/useServerSync";
 
 const FALLBACK_INSTRUMENTS: Record<InstrumentId, InstrumentInfo> = {
 	drums: {
@@ -44,7 +45,8 @@ export default function InstrumentsScreen() {
 	const [demoInstrument, setDemoInstrument] = useState<InstrumentInfo | null>(null);
 	const [energy, setEnergy] = useState(0);
 	const [spotlight, setSpotlight] = useState<InstrumentId | null>(null);
-
+	useServerSync();
+	
 	useEffect(() => {
 		connect();
 	}, [connect]);
