@@ -1,5 +1,8 @@
+import type {
+	BeatsPhase,
+	GroupAccuracy,
+} from "@mikiwikipolvoron/wilco-lib/data";
 import { create } from "zustand";
-import type { GroupAccuracy, BeatsPhase } from "@mikiwikipolvoron/wilco-lib/data";
 
 interface BeatsStore {
 	// Current state
@@ -17,7 +20,11 @@ interface BeatsStore {
 	// Actions
 	setPhase: (phase: BeatsPhase, round: number, bpm: number) => void;
 	updateGroupAccuracies: (groupAccuracies: GroupAccuracy[]) => void;
-	setResults: (winner: string, groupAccuracies: GroupAccuracy[], mvp: { playerId: string; nickname: string; accuracy: number }) => void;
+	setResults: (
+		winner: string,
+		groupAccuracies: GroupAccuracy[],
+		mvp: { playerId: string; nickname: string; accuracy: number },
+	) => void;
 	reset: () => void;
 }
 
@@ -37,12 +44,13 @@ export const useBeatsStore = create<BeatsStore>((set) => ({
 
 	updateGroupAccuracies: (groupAccuracies) => set({ groupAccuracies }),
 
-	setResults: (winner, groupAccuracies, mvp) => set({
-		phase: "results",
-		winner,
-		groupAccuracies,
-		mvp
-	}),
+	setResults: (winner, groupAccuracies, mvp) =>
+		set({
+			phase: "results",
+			winner,
+			groupAccuracies,
+			mvp,
+		}),
 
 	reset: () => set(initialState),
 }));
