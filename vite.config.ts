@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
             server: {
                 host: true,
                 allowedHosts: ["https://mikiwikipolvoron.github.io"],
+                cors: {
+                    origin: "https://ws.tardy.sh" 
+                }
             },
             base: '/wilco-entertainer/'
         }
