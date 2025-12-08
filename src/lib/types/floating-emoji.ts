@@ -1,4 +1,3 @@
-
 export type FloatingEmoji = {
 	id: number;
 	emoji: string;
