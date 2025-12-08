@@ -18,7 +18,7 @@ export function useLobbySync() {
 		if (!socket) return;
 
 		function handler(event: ServerEvent) {
-            console.debug(event)
+			console.debug(event);
 			if (event.type === "reaction") {
 				const x = Math.random() * window.innerWidth;
 				const y = window.innerHeight - 50;
