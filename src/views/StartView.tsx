@@ -17,7 +17,7 @@ export default function StartView() {
 	useServerSync();
 	useEffect(() => {
 		if (secondsRemaining <= 0) {
-            act.startOver();
+			act.startOver();
 			act.startBeats();
 		}
 		const timer = setInterval(() => {
@@ -28,29 +28,14 @@ export default function StartView() {
 	}, [secondsRemaining]);
 
 	return (
-		<div
-			style={{
-				width: "100%",
-				height: "100vh",
-				background: "#FFD6E8", // pastel pink
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "center",
-				alignItems: "center",
-				textAlign: "center",
-				padding: "2rem",
-				fontFamily: "system-ui",
-				position: "relative",
-				overflow: "hidden",
-			}}
-		>
+		<div className="w-full h-screen flex flex-col justify-evenly align-middle text-center p-0 items-center m-0 border-0 gradient-background text-blue-950">
 			{/* Lobby core UI */}
-			<h1>Join to set the stage!</h1>
-			<p>
+			<h1 className="text-8xl">Join to set the stage!</h1>
+			<p className="text-3xl">
 				First activity starts in <strong>{secondsRemaining}</strong>
 			</p>
-			<div className="m-6">
-				<QRCodeSVG value={clientUrl} />
+			<div className="p-2 rounded-xl mt-2 mb-2 bg-[#e2e2e2] shadow-md">
+				<QRCodeSVG size="200" bgColor="#e2e2e2e2" fgColor="#162556" value={clientUrl} />
 			</div>
 			<p style={{ fontSize: "1rem" }}>
 				Scan this QR code on your phone to join:
@@ -78,15 +63,16 @@ export default function StartView() {
 
 			{/* Floating emojis overlay, only active in lobby */}
 			<div
-				style={{
-					position: "absolute",
-					top: 0,
-					left: 0,
-					width: "100%",
-					height: "100%",
-					pointerEvents: "none",
-					overflow: "hidden",
-				}}
+				className="absolute w-full h-screen pointer-events-none overflow-hidden p-0 m-0"
+				// style={{
+				// 	position: "absolute",
+				// 	top: 0,
+				// 	left: 0,
+				// 	width: "100%",
+				// 	height: "100%",
+				// 	pointerEvents: "none",
+				// 	overflow: "hidden",
+				// }}
 			>
 				{emojis.map((item) => (
 					<div
