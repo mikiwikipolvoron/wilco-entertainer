@@ -30,7 +30,7 @@ const Entertainer: React.FC = () => {
 	useServerSync();
 
 	return (
-		<div className="p-8 w-full h-screen flex flex-col justify-center items-center text-center">
+		<div className="max-h-screen max-w-full p-0 w-full h-screen flex flex-col justify-center items-center text-center">
 			{currentActivity === "start" && <StartView />}
 			{currentActivity === "lobby" && <LobbyView />}
 			{currentActivity === "beats" && <TapBeatsScreen />}
