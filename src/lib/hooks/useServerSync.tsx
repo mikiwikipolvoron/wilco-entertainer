@@ -21,7 +21,7 @@ export function useServerSync() {
 		// below the `ServerEvent` to `ServerServiceEvent` temporarily to get
 		// good suggestions and change it back afterwards!
 		const handleServerEvent = (event: ServerEvent) => {
-            console.debug(event);
+			console.debug(event);
 			switch (event.type) {
 				case "player_joined":
 					store._handlePlayerJoined(event.player);
