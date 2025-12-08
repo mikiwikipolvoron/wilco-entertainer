@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";
 import { useServerSync } from "../lib/hooks/useServerSync";
 import { useBeatsStore } from "../lib/stores/useBeatsStore";
+import BlurryBox from "../lib/components/BlurryBox";
 
 // Team color mapping
 const TEAM_COLORS = {
@@ -242,7 +243,7 @@ export default function TapBeatsScreen() {
 }
 
 function BeatsActivityPhase() {
-    // removed bpm, winner, mvp
+	// removed bpm, winner, mvp
 	const { phase, round, groupAccuracies } = useBeatsStore();
 
 	// Calculate winning team(s) during beat_off phase
@@ -473,7 +474,7 @@ function InstructionsPhase({
 	onEnableAudio: () => void;
 }) {
 	return (
-		<div className="w-screen h-screen bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 flex flex-col items-center justify-center text-white p-12 relative">
+		<div className="w-screen h-screen dark-gradient-bg flex flex-col items-center justify-center text-white p-12 relative">
 			{/* Audio permission button - always show if not granted */}
 			{!audioPermissionGranted && (
 				<div className="absolute top-8 left-1/2 -translate-x-1/2 z-50">
@@ -487,23 +488,22 @@ function InstructionsPhase({
 			)}
 
 			{/* Part 1: Team Assignment (0-15s) */}
-			<div className="instruction-part-1 absolute inset-0 flex flex-col items-center justify-center p-12">
-				<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 max-w-5xl">
-					<p className="text-5xl font-bold mb-8 text-center">
-						You have been assigned to
-						<br />
-						Team Pink, Blue, Orange, or Green
-					</p>
-					<p className="text-3xl text-center mt-8 leading-relaxed">
+			<div className="instruction-part-1 absolute inset-0 flex flex-col items-center justify-evenly p-12">
+				<p className="text-7xl font-bold text-center">
+					You have been assigned to a team
+				</p>
+				<div className="bg-purple-500/40 backdrop-blur-sm rounded-2xl p-12 max-w-4xl flex flex-col items-center justify-center">
+					<p className="text-5xl text-center leading-relaxed">
 						Raise your screen to your forehead
-						<br />
+					</p>
+					<p className="text-5xl text-center leading-relaxed">
 						and look around to find your teammates!
 					</p>
 				</div>
 			</div>
 
 			{/* Part 2: Title (15-18s) */}
-			<div className="instruction-part-2 absolute inset-0 flex items-center justify-center">
+			<div className="instruction-part-2 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 absolute inset-0 flex items-center justify-center">
 				<h1 className="text-9xl font-bold text-center leading-tight">
 					Team Synchronization
 					<br />
@@ -512,26 +512,22 @@ function InstructionsPhase({
 			</div>
 
 			{/* Part 3: Explanation (18-28s) */}
-			<div className="instruction-part-3 absolute inset-0 flex flex-col items-center justify-center p-12">
-				<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 max-w-5xl">
-					<p className="text-5xl font-bold text-red-400 mb-8 text-center">
-						!The stage is out of sync!
+			<div className="instruction-part-3 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 absolute inset-0 flex flex-col items-center justify-evenly p-12">
+				<p className="text-7xl font-bold text-red-400 text-center">
+					!The stage is out of sync!
+				</p>
+				<BlurryBox>
+					<p className="text-5xl text-center text-wrap">
+						As teams, you need to tap to the beat to resynchronize it.
 					</p>
-					<p className="text-3xl text-center leading-relaxed">
-						As teams, you need to tap to the beat
-						<br />
-						to resynchronize it.
+					<p className="text-4xl text-center opacity-80 text-wrap">
+						The better your team's timing, the stronger your presence on stage!
 					</p>
-					<p className="text-2xl text-center mt-8 opacity-80">
-						The better your team's timing,
-						<br />
-						the stronger your presence on stage!
-					</p>
-				</div>
+				</BlurryBox>
 			</div>
 
 			{/* Part 4: Get Ready (28-38s) */}
-			<div className="instruction-part-4 absolute inset-0 flex items-center justify-center">
+			<div className="instruction-part-4 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 absolute inset-0 flex items-center justify-center">
 				<p className="text-8xl font-bold animate-pulse">Get ready to tap...</p>
 			</div>
 
