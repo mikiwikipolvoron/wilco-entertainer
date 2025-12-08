@@ -5,8 +5,8 @@ import type {
 	ServerEvent,
 } from "@mikiwikipolvoron/wilco-lib/events";
 import { useEffect, useMemo, useState } from "react";
-import { useSocketStore } from "../lib/stores/useSocketStore";
 import { useServerSync } from "../lib/hooks/useServerSync";
+import { useSocketStore } from "../lib/stores/useSocketStore";
 
 const FALLBACK_INSTRUMENTS: Record<InstrumentId, InstrumentInfo> = {
 	drums: {
@@ -42,11 +42,13 @@ const FALLBACK_INSTRUMENTS: Record<InstrumentId, InstrumentInfo> = {
 export default function InstrumentsScreen() {
 	const { connect, socket } = useSocketStore();
 	const [phase, setPhase] = useState<InstrumentsPhase>("demo");
-	const [demoInstrument, setDemoInstrument] = useState<InstrumentInfo | null>(null);
+	const [demoInstrument, setDemoInstrument] = useState<InstrumentInfo | null>(
+		null,
+	);
 	const [energy, setEnergy] = useState(0);
 	const [spotlight, setSpotlight] = useState<InstrumentId | null>(null);
 	useServerSync();
-	
+
 	useEffect(() => {
 		connect();
 	}, [connect]);
@@ -99,7 +101,9 @@ export default function InstrumentsScreen() {
 function DemoView({ instrument }: { instrument: InstrumentInfo }) {
 	return (
 		<div className="flex-1 rounded-3xl border border-white/10 bg-white/5 p-8 flex flex-col items-center justify-center text-center gap-4">
-			<div className="text-sm uppercase tracking-wide text-slate-200">Demo loop</div>
+			<div className="text-sm uppercase tracking-wide text-slate-200">
+				Demo loop
+			</div>
 			<div className="text-5xl font-extrabold">{instrument.name}</div>
 			<div className="text-xl text-slate-200">{instrument.hint}</div>
 			<div
@@ -133,7 +137,8 @@ function FinaleView({
 					<div
 						className="absolute inset-0 rounded-full"
 						style={{
-							background: "radial-gradient(circle, rgba(34,197,94,0.6), transparent 60%)",
+							background:
+								"radial-gradient(circle, rgba(34,197,94,0.6), transparent 60%)",
 							transform: `scale(${0.8 + energy * 0.4})`,
 							transition: "transform 200ms ease-out",
 						}}
@@ -147,7 +152,9 @@ function FinaleView({
 				<div
 					key={inst.id}
 					className={`rounded-3xl border ${
-						spotlight === inst.id ? "border-yellow-400 bg-yellow-200 text-black" : "border-white/10 bg-white/5"
+						spotlight === inst.id
+							? "border-yellow-400 bg-yellow-200 text-black"
+							: "border-white/10 bg-white/5"
 					} p-4 flex flex-col items-center justify-center text-center gap-2`}
 				>
 					<div className="text-2xl font-extrabold">{inst.name}</div>
