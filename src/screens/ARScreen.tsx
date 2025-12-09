@@ -13,6 +13,7 @@ export default function ARScreen() {
 		tapsNeeded,
 		participatingPlayers,
 		lastCollectedItemId,
+		instructionText,
 	} = useARStore();
 	const [showNotification, setShowNotification] = useState(false);
 
@@ -29,6 +30,7 @@ export default function ARScreen() {
 
 	return (
 		<div className="w-screen h-screen bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 text-white p-12">
+			{phase === "instructions" && <Instructions text={instructionText} />}
 			{phase === "anchoring" && <AnchoringPhase />}
 			{phase === "hunting" && (
 				<HuntingPhase
@@ -211,6 +213,14 @@ function ResultsPhase({
 			</div>
 
 			<p className="text-2xl mt-12 opacity-70">Returning to lobby...</p>
+		</div>
+	);
+}
+
+function Instructions({ text }: { text: string }) {
+	return (
+		<div className="flex items-center justify-center h-full text-center">
+			<BlurryBox text={text || "Awaiting instructions..."} />
 		</div>
 	);
 }
