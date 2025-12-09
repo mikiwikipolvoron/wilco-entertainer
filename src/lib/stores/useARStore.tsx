@@ -9,8 +9,10 @@ interface EntertainerARState {
 	bossMaxHealth: number;
 	participatingPlayers: number;
 	lastCollectedItemId: string | null;
+	instructionText: string;
 
 	setPhase: (phase: ARPhase) => void;
+	setInstructionText: (text: string) => void;
 	updateProgress: (totalTaps: number, tapsNeeded: number) => void;
 	updateBossHealth: (health: number, maxHealth: number) => void;
 	setItemCollected: (
@@ -23,15 +25,17 @@ interface EntertainerARState {
 }
 
 export const useARStore = create<EntertainerARState>((set) => ({
-	phase: "anchoring",
+	phase: "instructions",
 	totalTaps: 0,
 	tapsNeeded: 0,
 	bossHealth: 0,
 	bossMaxHealth: 30,
 	participatingPlayers: 0,
 	lastCollectedItemId: null,
+	instructionText: "",
 
 	setPhase: (phase) => set({ phase }),
+	setInstructionText: (text) => set({ instructionText: text }),
 	updateProgress: (totalTaps, tapsNeeded) => set({ totalTaps, tapsNeeded }),
 	updateBossHealth: (health, maxHealth) =>
 		set({ bossHealth: health, bossMaxHealth: maxHealth }),
@@ -41,11 +45,12 @@ export const useARStore = create<EntertainerARState>((set) => ({
 		set({ totalTaps, participatingPlayers }),
 	reset: () =>
 		set({
-			phase: "anchoring",
+			phase: "instructions",
 			totalTaps: 0,
 			tapsNeeded: 0,
 			bossHealth: 0,
 			participatingPlayers: 0,
 			lastCollectedItemId: null,
+			instructionText: "",
 		}),
 }));
