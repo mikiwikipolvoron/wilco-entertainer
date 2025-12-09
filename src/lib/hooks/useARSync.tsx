@@ -17,6 +17,11 @@ export function useARSync() {
 					useARStore.getState().setPhase(event.phase);
 					break;
 
+				case "ar_instruction":
+					useARStore.getState().setPhase(event.phase);
+					useARStore.getState().setInstructionText(event.text);
+					break;
+
 				case "ar_boss_health":
 					useARStore.getState().updateBossHealth(event.health, event.maxHealth);
 					break;
