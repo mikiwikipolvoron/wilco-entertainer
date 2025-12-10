@@ -1,10 +1,13 @@
-import type { BeatsPhase } from "@mikiwikipolvoron/wilco-lib/data";
+import type {
+	BeatsPhase,
+	GroupAccuracy,
+} from "@mikiwikipolvoron/wilco-lib/data";
 import { Howl } from "howler";
 import { useEffect, useRef, useState } from "react";
+import BlurryBox from "../lib/components/BlurryBox";
 import { useBeatsSync } from "../lib/hooks/useBeatsSync";
 import { useServerSync } from "../lib/hooks/useServerSync";
 import { useBeatsStore } from "../lib/stores/useBeatsStore";
-import BlurryBox from "../lib/components/BlurryBox";
 
 // Team color mapping
 const TEAM_COLORS = {
@@ -479,6 +482,7 @@ function InstructionsPhase({
 			{!audioPermissionGranted && (
 				<div className="absolute top-8 left-1/2 -translate-x-1/2 z-50">
 					<button
+                        type="button"
 						onClick={onEnableAudio}
 						className="bg-green-500 hover:bg-green-600 text-white text-4xl font-bold py-6 px-12 rounded-2xl shadow-2xl transition-all transform hover:scale-105 animate-pulse"
 					>
@@ -602,7 +606,7 @@ function ResultsPhase({
 	mvp,
 }: {
 	winner: string | null;
-	groupAccuracies: any[];
+	groupAccuracies: GroupAccuracy[];
 	mvp: { playerId: string; nickname: string; accuracy: number } | null;
 }) {
 	const winnerColor = winner

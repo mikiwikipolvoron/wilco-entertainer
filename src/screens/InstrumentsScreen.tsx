@@ -73,8 +73,11 @@ export default function InstrumentsScreen() {
 					break;
 			}
 		};
+
 		socket.on("server_event", handleEvent);
-		return () => socket.off("server_event", handleEvent);
+		return () => {
+			socket.off("server_event", handleEvent);
+		};
 	}, [socket]);
 
 	const instrumentsList = useMemo(
@@ -83,7 +86,7 @@ export default function InstrumentsScreen() {
 	);
 
 	return (
-		<div className="w-full h-screen bg-gradient-to-br from-slate-900 via-slate-950 to-black text-white p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 overflow-hidden">
+		<div className="w-full h-screen bg-linear-to-br from-slate-900 via-slate-950 to-black text-white p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 overflow-hidden">
 			{phase === "demo" && (
 				<DemoView instrument={demoInstrument ?? FALLBACK_INSTRUMENTS.drums} />
 			)}

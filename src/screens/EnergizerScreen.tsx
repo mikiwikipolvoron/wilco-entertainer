@@ -169,9 +169,9 @@ function MovementVisual({
 		players.reduce((acc, p) => acc + p.charge, 0) / Math.max(players.length, 1);
 	return (
 		<div
-			className={`flex rounded-3xl  overflow-hidden ${
+			className={`flex rounded-3xl overflow-hidden w-full h-screen ${
 				spotlight
-					? "bg-yellow-300 border-none border-yellow-400"
+					? "bg-yellow-300 border-none"
 					: "border border-cyan-200/20 bg-linear-to-tr from-cyan-900/40 via-slate-900 to-slate-950"
 			}`}
 		>
@@ -183,15 +183,15 @@ function MovementVisual({
 				>
 					{spotlight ? "SPOTLIGHT BONUS" : "Charging..."}
 				</div>
-				<BlurryBox className="max-w-3xl h-5 rounded-full bg-white/20 overflow-hidden">
+				<div className="max-w-3xl w-full h-8 rounded-full bg-white/20 overflow-hidden backdrop-blur-sm border border-white/30">
 					<div
-						className={`h-full ${spotlight ? "bg-black" : "bg-cyan-300"}`}
+						className={`h-full rounded-full ${spotlight ? "bg-black" : "bg-cyan-300"}`}
 						style={{
 							width: `${Math.min(100, avgCharge * 100)}%`,
 							transition: "width 150ms ease-out",
 						}}
 					/>
-				</BlurryBox>
+				</div>
 			</div>
 		</div>
 	);
@@ -199,13 +199,11 @@ function MovementVisual({
 
 function SendEnergyVisual() {
 	return (
-		<div className="w-full h-screen border-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 font-extrabold flex-col items-center justify-center text-center">
-			<div className="max-w-4xl flex flex-col items-center justify-center text-center">
-				<p className="text-6xl font-semibold">Send the energy!</p>
-				<p className="text-slate-200 text-2xl">
-					Players are swiping their charge to the stage.
-				</p>
-			</div>
+		<div className="w-full h-screen border-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 font-extrabold flex flex-col items-center justify-center align-middle text-center">
+			<BlurryBox
+				title="Send the energy!"
+				text="Players are swiping their charge to the stage."
+			/>
 		</div>
 	);
 }

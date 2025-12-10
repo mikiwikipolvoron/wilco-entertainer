@@ -5,7 +5,7 @@ import { create } from "zustand";
 const SERVER_URL =
 	import.meta.env.MODE === "production"
 		? "https://ws.tardy.sh"
-		: "http://localhost:4000";
+		: "http://192.168.0.144:4000";
 console.debug(SERVER_URL);
 interface SocketStore {
 	socket: Socket | null;

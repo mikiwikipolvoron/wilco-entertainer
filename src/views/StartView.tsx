@@ -1,5 +1,5 @@
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useEntertainerActions } from "../lib/hooks/useEntertainerActions";
 import { useLobbySync } from "../lib/hooks/useLobbySync";
 import { useServerSync } from "../lib/hooks/useServerSync";
@@ -12,20 +12,28 @@ export default function StartView() {
 		useLobbyStore();
 	const clientUrl = "https://mikiwikipolvoron.github.io/wilco-client";
 	const act = useEntertainerActions();
+	const hasStartedRef = useRef(false);
 
 	useLobbySync();
 	useServerSync();
+
+	// Countdown timer effect (runs once on mount)
 	useEffect(() => {
-		if (secondsRemaining <= 0) {
-			act.startOver();
-			act.startBeats();
-		}
 		const timer = setInterval(() => {
 			decreaseSecondsRemaining();
 		}, 1000);
 
-		return () => clearInterval(timer); // Cleanup
-	}, [secondsRemaining]);
+		return () => clearInterval(timer);
+	}, [decreaseSecondsRemaining]);
+
+	// Activity start trigger (only fires once when countdown reaches 0)
+	useEffect(() => {
+		if (secondsRemaining <= 0 && !hasStartedRef.current) {
+			hasStartedRef.current = true;
+			act.startOver();
+			act.startBeats();
+		}
+	}, [secondsRemaining, act]);
 
 	return (
 		<div className="w-full h-screen flex flex-col justify-evenly align-middle text-center p-0 items-center m-0 border-0 gradient-background text-blue-950">
@@ -35,7 +43,7 @@ export default function StartView() {
 				First activity starts in <strong>{secondsRemaining}</strong>
 			</p>
 			<div className="p-2 rounded-xl mt-2 mb-2 bg-[#e2e2e2] shadow-md">
-				<QRCodeSVG size="200" bgColor="#e2e2e2e2" fgColor="#162556" value={clientUrl} />
+				<QRCodeSVG size={200} bgColor="#e2e2e2e2" fgColor="#162556" value={clientUrl} />
 			</div>
 			<p style={{ fontSize: "1rem" }}>
 				Scan this QR code on your phone to join:

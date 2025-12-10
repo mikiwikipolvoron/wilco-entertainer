@@ -21,7 +21,7 @@ export default function LobbyView() {
 			</p>
 			<div className="p-2 rounded-xl mt-2 mb-2 bg-[#e2e2e2] shadow-md">
 				<QRCodeSVG
-					size="200"
+					size={200}
 					bgColor="#e2e2e2e2"
 					fgColor="#162556"
 					value={clientUrl}
