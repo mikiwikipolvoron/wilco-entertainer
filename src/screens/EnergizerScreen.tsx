@@ -38,6 +38,17 @@ export default function EnergizerScreen() {
 	} | null>(null);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [audioBlocked, setAudioBlocked] = useState(false);
+	const [energyEmojis, setEnergyEmojis] = useState<
+		Array<{
+			id: number;
+			emoji: string;
+			x: number;
+			y: number;
+			scale: number;
+			duration: number;
+			jitter: number;
+		}>
+	>([]);
 	useServerSync();
 
 	useEffect(() => {
@@ -89,6 +100,21 @@ export default function EnergizerScreen() {
 						total: event.totalParticipants,
 					});
 					break;
+				case "energizer_energy_sent":
+					// Add animated emoji when energy is sent
+					setEnergyEmojis((prev) => [
+						...prev,
+						{
+							id: Date.now() + Math.random(),
+							emoji: "✨",
+							x: Math.random() * window.innerWidth,
+							y: window.innerHeight - 50,
+							scale: 0.8 + Math.random() * 0.6,
+							duration: 2.5 + Math.random() * 1.0,
+							jitter: (Math.random() - 0.5) * 30,
+						},
+					]);
+					break;
 				default:
 					break;
 			}
@@ -126,7 +152,7 @@ export default function EnergizerScreen() {
 				<MovementVisual players={players} spotlight={spotlight} />
 			)}
 
-			{phase === "send_energy" && <SendEnergyVisual />}
+			{phase === "send_energy" && <SendEnergyVisual energyEmojis={energyEmojis} />}
 
 			{(phase === "sequence_show" || phase === "sequence_input") && (
 				<SequenceVisual
@@ -197,13 +223,73 @@ function MovementVisual({
 	);
 }
 
-function SendEnergyVisual() {
+function SendEnergyVisual({
+	energyEmojis,
+}: {
+	energyEmojis: Array<{
+		id: number;
+		emoji: string;
+		x: number;
+		y: number;
+		scale: number;
+		duration: number;
+		jitter: number;
+	}>;
+}) {
 	return (
 		<div className="w-full h-screen border-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900 font-extrabold flex flex-col items-center justify-center align-middle text-center">
 			<BlurryBox
 				title="Send the energy!"
 				text="Players are swiping their charge to the stage."
 			/>
+
+			{/* Emoji animation keyframes */}
+			<style>
+				{`
+					@keyframes floatUpEnergy {
+						0% {
+							transform: translate(var(--start-x), var(--start-y)) scale(var(--scale));
+							opacity: 1;
+						}
+						100% {
+							transform: translate(var(--start-x), calc(var(--start-y) - 1300px))
+											translateX(calc(var(--jitter) * 1px))
+											scale(var(--scale));
+							opacity: 0;
+						}
+					}
+				`}
+			</style>
+
+			{/* Floating energy emojis overlay */}
+			<div
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					width: "100%",
+					height: "100%",
+					pointerEvents: "none",
+					overflow: "hidden",
+				}}
+			>
+				{energyEmojis.map((item) => (
+					<div
+						key={item.id}
+						className="text-5xl top-0 left-0 absolute pointer-events-none"
+						style={{
+							transform: `translate(var(--start-x), var(--start-y))`,
+							animation: `floatUpEnergy ${item.duration}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+							["--start-x" as string]: `${item.x}px`,
+							["--start-y" as string]: `${item.y}px`,
+							["--scale" as string]: item.scale.toString(),
+							["--jitter" as string]: item.jitter.toString(),
+						}}
+					>
+						{item.emoji}
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }

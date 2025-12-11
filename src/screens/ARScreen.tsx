@@ -57,14 +57,14 @@ function AnchoringPhase() {
 		<div className="flex flex-col items-center justify-center h-full">
 			<h1 className="text-6xl font-bold mb-8">AR Dressing Room Challenge</h1>
 
-			{/* Display ARUCO/Hiro marker */}
+			{/* Display calibration target */}
 			<BlurryBox>
-				<p className="text-3xl mb-12">Scan this marker with your phone</p>
+				<p className="text-3xl mb-12">Point your camera at the target</p>
 
 				<img
-					src="/markers/aruco-15.svg"
-					alt="AR Marker - ArUco ID 15"
-					className="w-96 h-96 hidden"
+					src="/target.png"
+					alt="AR Calibration Target"
+					className="w-96 h-96 object-contain"
 				/>
 				<p className="text-2xl mt-8 opacity-70">
 					Activity starts in 30 seconds...
