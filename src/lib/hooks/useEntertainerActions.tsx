@@ -4,6 +4,8 @@ import type {
 	ClientServiceEvent,
 } from "@mikiwikipolvoron/wilco-lib/events";
 import { useSocketStore } from "../stores/useSocketStore";
+import { getDeviceId } from "../utils/deviceId";
+import { getSessionIdFromUrl } from "../utils/sessionId";
 
 export function useEntertainerActions() {
 	const { socket } = useSocketStore();
@@ -11,10 +13,14 @@ export function useEntertainerActions() {
 	return {
 		// Service actions
 		register: () => {
-			socket?.connect();
+			const sessionId = getSessionIdFromUrl();
+			const deviceId = getDeviceId();
+
 			const event: ClientServiceEvent = {
 				type: "register",
 				role: "entertainer",
+				sessionId: sessionId || undefined,
+				deviceId,
 			};
 			socket?.emit("client_event", event);
 		},
