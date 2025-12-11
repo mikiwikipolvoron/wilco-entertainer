@@ -62,7 +62,7 @@ function AnchoringPhase() {
 				<p className="text-3xl mb-12">Point your camera at the target</p>
 
 				<img
-					src="/target.png"
+					src={`${import.meta.env.BASE_URL}target.png`}
 					alt="AR Calibration Target"
 					className="max-w-xl max-h-96 object-contain mx-auto"
 				/>
@@ -116,7 +116,7 @@ function HuntingPhase({
 			{/* Dressing Room Placeholder */}
 			<div className="flex-col bg-white/10 backdrop-blur-sm rounded-2xl p-3 flex items-center justify-center">
 				<img
-					src="/flower.png"
+					src={`${import.meta.env.BASE_URL}flower.png`}
 					alt="Missing Item"
 					className="max-w-lg object-contain"
 					style={{
@@ -165,7 +165,7 @@ function BossPhase({
 			{/* Boss Icon */}
 			<div className="mt-12 animate-bounce">
 				<img
-					src="/flower.png"
+					src={`${import.meta.env.BASE_URL}flower.png`}
 					alt="Boss Enemy"
 					className="w-96 h-96 object-contain"
 					style={{
@@ -193,7 +193,7 @@ function ResultsPhase({
 
 			<div className="mb-8">
 				<img
-					src="/flower.png"
+					src={`${import.meta.env.BASE_URL}flower.png`}
 					alt="Collected Item"
 					className="w-96 h-96 object-contain"
 					style={{

@@ -33,7 +33,7 @@ export default function TapBeatsScreen() {
 		console.log("[TapBeatsScreen] Initializing audio");
 
 		beatAudioRef.current = new Howl({
-			src: ["/audio/BeatsLushLife.mp3"],
+			src: [`${import.meta.env.BASE_URL}audio/BeatsLushLife.mp3`],
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Beat track loaded"),
@@ -42,7 +42,7 @@ export default function TapBeatsScreen() {
 		});
 
 		melodyAudioRef.current = new Howl({
-			src: ["/audio/MelodyLushLife.mp3"],
+			src: [`${import.meta.env.BASE_URL}audio/MelodyLushLife.mp3`],
 			loop: true,
 			volume: 1.0,
 			onload: () => console.log("[Audio] Melody track loaded"),

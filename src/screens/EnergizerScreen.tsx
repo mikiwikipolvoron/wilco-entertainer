@@ -128,7 +128,7 @@ export default function EnergizerScreen() {
 
 	return (
 		<div className="w-full h-screen">
-			<audio ref={audioRef} src="/audio/Midnight Sun.mp3" loop />
+			<audio ref={audioRef} src={`${import.meta.env.BASE_URL}audio/Midnight Sun.mp3`} loop />
 			{audioBlocked && phase === "movement" && (
 				<button
 					type="button"
