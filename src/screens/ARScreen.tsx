@@ -64,7 +64,7 @@ function AnchoringPhase() {
 				<img
 					src="/target.png"
 					alt="AR Calibration Target"
-					className="w-96 h-96 object-contain"
+					className="max-w-2/5 max-h-2/5 object-contain"
 				/>
 				<p className="text-2xl mt-8 opacity-70">
 					Activity starts in 30 seconds...
